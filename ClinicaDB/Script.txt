@@ -1,0 +1,504 @@
+USE [master]
+GO
+/****** Object:  Database [ClinicaDB]    Script Date: 7/31/2024 9:52:36 PM ******/
+CREATE DATABASE [ClinicaDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'ClinicaDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ClinicaDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'ClinicaDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ClinicaDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [ClinicaDB] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [ClinicaDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [ClinicaDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [ClinicaDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [ClinicaDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [ClinicaDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [ClinicaDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [ClinicaDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [ClinicaDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [ClinicaDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [ClinicaDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [ClinicaDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [ClinicaDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [ClinicaDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [ClinicaDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [ClinicaDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [ClinicaDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [ClinicaDB]
+GO
+/****** Object:  Table [dbo].[Citas]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Citas](
+	[Codigo] [varchar](50) NOT NULL,
+	[Fecha] [date] NULL,
+	[Notas] [text] NULL,
+	[Especialidad] [varchar](100) NULL,
+	[DoctorID] [int] NULL,
+	[UsuarioID] [int] NULL,
+	[estado] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ConsultaEnfermedad]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ConsultaEnfermedad](
+	[ConsultaID] [int] NOT NULL,
+	[EnfermedadCodigo] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ConsultaID] ASC,
+	[EnfermedadCodigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Consultas]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Consultas](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[CitaCodigo] [varchar](50) NULL,
+	[Observaciones] [text] NULL,
+	[Diagnostico] [text] NULL,
+	[Receta] [text] NULL,
+	[Historial] [bit] NULL,
+	[Estatura] [int] NULL,
+	[Peso] [int] NULL,
+	[TipoSangre] [varchar](5) NULL,
+	[RH] [varchar](5) NULL,
+	[Fecha] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Dosis]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Dosis](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[VacunaCodigo] [varchar](50) NULL,
+	[PacienteID] [int] NULL,
+	[MedicoID] [int] NULL,
+	[Fecha] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Enfermedades]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Enfermedades](
+	[Codigo] [varchar](50) NOT NULL,
+	[Nombre] [varchar](100) NULL,
+	[Tipo] [varchar](100) NULL,
+	[Informacion] [text] NULL,
+	[Descubierta] [date] NULL,
+	[Transmisibilidad] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Historiales]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Historiales](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ConsultaID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Medicos]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Medicos](
+	[ID] [int] NOT NULL,
+	[Login] [varchar](50) NULL,
+	[Password] [varchar](50) NULL,
+	[Consultorio] [varchar](50) NULL,
+	[Especialidad] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Pacientes]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Pacientes](
+	[ID] [int] NOT NULL,
+	[TipoSangre] [varchar](5) NULL,
+	[RH] [varchar](5) NULL,
+	[Ocupacion] [varchar](100) NULL,
+	[TelefonoOpc] [varchar](15) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Usuarios]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Usuarios](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](100) NULL,
+	[Apellido] [varchar](100) NULL,
+	[FechaNacimiento] [date] NULL,
+	[Telefono] [varchar](15) NULL,
+	[Direccion] [varchar](255) NULL,
+	[Codigo] [varchar](50) NULL,
+	[Cedula] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[VacunaEnfermedad]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[VacunaEnfermedad](
+	[VacunaCodigo] [varchar](50) NOT NULL,
+	[EnfermedadCodigo] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[VacunaCodigo] ASC,
+	[EnfermedadCodigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Vacunas]    Script Date: 7/31/2024 9:52:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Vacunas](
+	[Codigo] [varchar](50) NOT NULL,
+	[Nombre] [varchar](100) NULL,
+	[Laboratorio] [varchar](100) NULL,
+	[Administracion] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C001', CAST(N'2024-07-01' AS Date), N'Consulta General', N'Cardiologia', 1, 6, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C002', CAST(N'2024-07-02' AS Date), N'Chequeo Anual', N'Neurologia', 2, 7, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C003', CAST(N'2024-07-03' AS Date), N'Revisión', N'Pediatria', 3, 8, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C004', CAST(N'2024-07-04' AS Date), N'Consulta Dermatológica', N'Dermatologia', 4, 9, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C006', CAST(N'2024-07-30' AS Date), N'88888', N'Oftalmología', 16, 24, N'pendiente')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C007', CAST(N'2024-07-31' AS Date), N'a', N'Pediatría', 3, 24, N'pendiente')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C008', CAST(N'2024-07-31' AS Date), N'a', N'Pediatría', 3, 6, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C009', CAST(N'2024-07-31' AS Date), N'si', N'Pediatría', 3, 6, N'realizada')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C010', CAST(N'2024-07-31' AS Date), N'aaaaaa', N'Pediatría', 3, 6, N'pendiente')
+GO
+INSERT [dbo].[Citas] ([Codigo], [Fecha], [Notas], [Especialidad], [DoctorID], [UsuarioID], [estado]) VALUES (N'C011', CAST(N'2024-07-31' AS Date), N'loloo', N'Pediatría', 3, 24, N'realizada')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (1, N'E001')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (2, N'E002')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (3, N'E003')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (4, N'E001')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (4, N'E002')
+GO
+INSERT [dbo].[ConsultaEnfermedad] ([ConsultaID], [EnfermedadCodigo]) VALUES (4, N'E004')
+GO
+SET IDENTITY_INSERT [dbo].[Consultas] ON 
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (1, N'C001', N'Observacion 1', N'Diagnostico 1', N'Receta 1', 1, 180, 75, N'A', N'+', CAST(N'2024-07-01' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (2, N'C002', N'Observacion 2', N'Diagnostico 2', N'Receta 2', 1, 175, 70, N'B', N'-', CAST(N'2024-07-02' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (3, N'C003', N'Observacion 3', N'Diagnostico 3', N'Receta 3', 1, 165, 65, N'O', N'+', CAST(N'2024-07-03' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (4, N'C004', N'Observacion 4', N'Diagnostico 4', N'Receta 4', 1, 160, 60, N'AB', N'-', CAST(N'2024-07-04' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (8, N'C002', N'a', N'a', N'a', 1, 0, 0, N'B', N'-', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (9, N'C008', N'aa', N'aa', N'aa', 1, 0, 0, N'A', N'+', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (10, N'C009', N'a', N'a', N'a', 1, 180, 10, N'A', N'+', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (11, N'C003', N'eee', N'eee', N'eee', 1, 2, 2, N'O', N'+', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (12, N'C003', N'eee', N'ee', N'eee', 1, 2, 2, N'O', N'+', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (13, N'C003', N'eee', N'ee', N'eee', 1, 2, 2, N'O', N'+', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (14, N'C004', N'aa', N'aa', N'aa', 1, 2, 2, N'AB', N'-', CAST(N'2024-07-31' AS Date))
+GO
+INSERT [dbo].[Consultas] ([ID], [CitaCodigo], [Observaciones], [Diagnostico], [Receta], [Historial], [Estatura], [Peso], [TipoSangre], [RH], [Fecha]) VALUES (15, N'C011', N'lo', N'lo', N'lo', 1, 5, 5, N'O', N'Nulo', CAST(N'2024-07-31' AS Date))
+GO
+SET IDENTITY_INSERT [dbo].[Consultas] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Dosis] ON 
+GO
+INSERT [dbo].[Dosis] ([ID], [VacunaCodigo], [PacienteID], [MedicoID], [Fecha]) VALUES (1, N'V001', 6, 1, CAST(N'2024-07-01' AS Date))
+GO
+INSERT [dbo].[Dosis] ([ID], [VacunaCodigo], [PacienteID], [MedicoID], [Fecha]) VALUES (2, N'V002', 7, 2, CAST(N'2024-07-02' AS Date))
+GO
+INSERT [dbo].[Dosis] ([ID], [VacunaCodigo], [PacienteID], [MedicoID], [Fecha]) VALUES (3, N'V003', 8, 3, CAST(N'2024-07-03' AS Date))
+GO
+INSERT [dbo].[Dosis] ([ID], [VacunaCodigo], [PacienteID], [MedicoID], [Fecha]) VALUES (4, N'V004', 9, 4, CAST(N'2024-07-04' AS Date))
+GO
+SET IDENTITY_INSERT [dbo].[Dosis] OFF
+GO
+INSERT [dbo].[Enfermedades] ([Codigo], [Nombre], [Tipo], [Informacion], [Descubierta], [Transmisibilidad]) VALUES (N'E001', N'Enfermedad 1', N'Cardiovascular', N'Informacion 1', CAST(N'2000-01-01' AS Date), 1)
+GO
+INSERT [dbo].[Enfermedades] ([Codigo], [Nombre], [Tipo], [Informacion], [Descubierta], [Transmisibilidad]) VALUES (N'E002', N'Enfermedad 2', N'Mental', N'Informacion 2', CAST(N'2001-02-02' AS Date), 2)
+GO
+INSERT [dbo].[Enfermedades] ([Codigo], [Nombre], [Tipo], [Informacion], [Descubierta], [Transmisibilidad]) VALUES (N'E003', N'Enfermedad 3', N'Traumatica', N'Informacion 3', CAST(N'2002-03-03' AS Date), 3)
+GO
+INSERT [dbo].[Enfermedades] ([Codigo], [Nombre], [Tipo], [Informacion], [Descubierta], [Transmisibilidad]) VALUES (N'E004', N'Corona', N'Virus', N'Informacion 4', CAST(N'2003-04-04' AS Date), 13)
+GO
+SET IDENTITY_INSERT [dbo].[Historiales] ON 
+GO
+INSERT [dbo].[Historiales] ([ID], [ConsultaID]) VALUES (1, 15)
+GO
+INSERT [dbo].[Historiales] ([ID], [ConsultaID]) VALUES (7, 1)
+GO
+INSERT [dbo].[Historiales] ([ID], [ConsultaID]) VALUES (8, 2)
+GO
+INSERT [dbo].[Historiales] ([ID], [ConsultaID]) VALUES (9, 3)
+GO
+INSERT [dbo].[Historiales] ([ID], [ConsultaID]) VALUES (10, 4)
+GO
+SET IDENTITY_INSERT [dbo].[Historiales] OFF
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (1, N'jdoe', N'password1', N'101', N'Cardiologia')
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (2, N'jadoe', N'password2', N'102', N'Neurologia')
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (3, N'jbeam', N'password3', N'103', N'Pediatria')
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (4, N'jdaniels', N'password4', N'<Seleccione>', N'<Seleccionar>')
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (16, N'c.hernandez', N'c123', N'A1-101', N'Oftalmología')
+GO
+INSERT [dbo].[Medicos] ([ID], [Login], [Password], [Consultorio], [Especialidad]) VALUES (27, N'ale', N'45', N'B1-201', N'Psiquiatría')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (6, N'A', N'+', N'Ingeniero', N'1234567')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (7, N'B', N'-', N'Profesor', N'2345678')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (8, N'O', N'+', N'Mecanico', N'3456789')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (9, N'AB', N'-', N'Arquitecto', N'4567890')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (10, N'A', N'-', N'Doctor', N'5678901')
+GO
+INSERT [dbo].[Pacientes] ([ID], [TipoSangre], [RH], [Ocupacion], [TelefonoOpc]) VALUES (24, N'O', N'Nulo', N'Empleado Privado', N'8')
+GO
+SET IDENTITY_INSERT [dbo].[Usuarios] ON 
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (1, N'John', N'Doe', CAST(N'1980-01-01' AS Date), N'1234567890', N'123 Main St', N'U001', N'710-2001636-0')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (2, N'Jane', N'Doe', CAST(N'1985-02-02' AS Date), N'2345678901', N'234 Main St', N'U002', N'262-2842002-3')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (3, N'Jim', N'Beam', CAST(N'1970-03-03' AS Date), N'3456789012', N'345 Main St', N'U003', N'302-8407999-1')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (4, N'Carlos', N'Daniels', CAST(N'1965-04-04' AS Date), N'4567890123', N'456 Main St', N'U004', N'898-2696257-0')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (6, N'Anna', N'Smith', CAST(N'1982-06-06' AS Date), N'6789012345', N'678 Main St', N'U006', N'110-7213950-6')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (7, N'Bob', N'Johnson', CAST(N'1987-07-07' AS Date), N'7890123456', N'789 Main St', N'U007', N'168-1927351-2')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (8, N'Chris', N'Lee', CAST(N'1992-08-08' AS Date), N'8901234567', N'890 Main St', N'U008', N'266-9989976-8')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (9, N'Diana', N'King', CAST(N'1975-09-09' AS Date), N'9012345678', N'901 Main St', N'U009', N'955-1902251-8')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (10, N'Evan', N'Baker', CAST(N'1968-10-10' AS Date), N'0123456789', N'012 Main St', N'U010', N'259-7155405-0')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (11, N'Frank', N'Martin', CAST(N'1972-11-11' AS Date), N'1234509876', N'345 Side St', N'U011', N'794-2328850-6')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (12, N'Gina', N'Clark', CAST(N'1983-12-12' AS Date), N'2345609876', N'456 Side St', N'U012', N'745-9457944-5')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (13, N'Henry', N'Moore', CAST(N'1991-01-13' AS Date), N'3456709876', N'567 Side St', N'U013', N'468-8400476-7')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (14, N'Ivy', N'Taylor', CAST(N'1989-02-14' AS Date), N'4567809876', N'678 Side St', N'U014', N'159-1084447-9')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (15, N'Jack', N'Anderson', CAST(N'1985-03-15' AS Date), N'5678909876', N'789 Side St', N'U015', N'830-2101152-6')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (16, N'Carlos', N'Hernandez', CAST(N'2003-07-02' AS Date), N'829784872', N'Calle C', N'U016', N'4024772111')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (21, N'a', N'a', CAST(N'2024-07-30' AS Date), N'5', N'a', N'U019', N'56')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (24, N'q', N'q', CAST(N'2024-07-30' AS Date), N'8', N'8', N'U020', N'88')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (26, N'Anna', N'Smith', CAST(N'2024-07-31' AS Date), N'6789012345', N'678 Main St', N'U006', N'U006')
+GO
+INSERT [dbo].[Usuarios] ([ID], [Nombre], [Apellido], [FechaNacimiento], [Telefono], [Direccion], [Codigo], [Cedula]) VALUES (27, N'Luisa', N'Herrera', CAST(N'2024-07-31' AS Date), N'45', N'45', N'U021', N'78')
+GO
+SET IDENTITY_INSERT [dbo].[Usuarios] OFF
+GO
+INSERT [dbo].[VacunaEnfermedad] ([VacunaCodigo], [EnfermedadCodigo]) VALUES (N'V001', N'E001')
+GO
+INSERT [dbo].[VacunaEnfermedad] ([VacunaCodigo], [EnfermedadCodigo]) VALUES (N'V002', N'E002')
+GO
+INSERT [dbo].[VacunaEnfermedad] ([VacunaCodigo], [EnfermedadCodigo]) VALUES (N'V003', N'E003')
+GO
+INSERT [dbo].[VacunaEnfermedad] ([VacunaCodigo], [EnfermedadCodigo]) VALUES (N'V004', N'E004')
+GO
+INSERT [dbo].[Vacunas] ([Codigo], [Nombre], [Laboratorio], [Administracion]) VALUES (N'V001', N'Vacuna 1', N'Lab 1', N'Oral')
+GO
+INSERT [dbo].[Vacunas] ([Codigo], [Nombre], [Laboratorio], [Administracion]) VALUES (N'V002', N'Vacuna 2', N'Lab 2', N'Inyectable')
+GO
+INSERT [dbo].[Vacunas] ([Codigo], [Nombre], [Laboratorio], [Administracion]) VALUES (N'V003', N'Vacuna 3', N'Lab 3', N'Inhalable')
+GO
+INSERT [dbo].[Vacunas] ([Codigo], [Nombre], [Laboratorio], [Administracion]) VALUES (N'V004', N'Vacuna 4', N'Lab 4', N'Tópica')
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UC_Cedula]    Script Date: 7/31/2024 9:52:37 PM ******/
+ALTER TABLE [dbo].[Usuarios] ADD  CONSTRAINT [UC_Cedula] UNIQUE NONCLUSTERED 
+(
+	[Cedula] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Citas] ADD  DEFAULT ('pendiente') FOR [estado]
+GO
+ALTER TABLE [dbo].[Citas]  WITH NOCHECK ADD FOREIGN KEY([DoctorID])
+REFERENCES [dbo].[Medicos] ([ID])
+GO
+ALTER TABLE [dbo].[Citas]  WITH NOCHECK ADD FOREIGN KEY([UsuarioID])
+REFERENCES [dbo].[Usuarios] ([ID])
+GO
+ALTER TABLE [dbo].[ConsultaEnfermedad]  WITH NOCHECK ADD FOREIGN KEY([ConsultaID])
+REFERENCES [dbo].[Consultas] ([ID])
+GO
+ALTER TABLE [dbo].[ConsultaEnfermedad]  WITH NOCHECK ADD FOREIGN KEY([EnfermedadCodigo])
+REFERENCES [dbo].[Enfermedades] ([Codigo])
+GO
+ALTER TABLE [dbo].[Consultas]  WITH NOCHECK ADD FOREIGN KEY([CitaCodigo])
+REFERENCES [dbo].[Citas] ([Codigo])
+GO
+ALTER TABLE [dbo].[Dosis]  WITH NOCHECK ADD FOREIGN KEY([MedicoID])
+REFERENCES [dbo].[Medicos] ([ID])
+GO
+ALTER TABLE [dbo].[Dosis]  WITH NOCHECK ADD FOREIGN KEY([PacienteID])
+REFERENCES [dbo].[Pacientes] ([ID])
+GO
+ALTER TABLE [dbo].[Dosis]  WITH NOCHECK ADD FOREIGN KEY([VacunaCodigo])
+REFERENCES [dbo].[Vacunas] ([Codigo])
+GO
+ALTER TABLE [dbo].[Historiales]  WITH CHECK ADD FOREIGN KEY([ConsultaID])
+REFERENCES [dbo].[Consultas] ([ID])
+GO
+ALTER TABLE [dbo].[Medicos]  WITH NOCHECK ADD FOREIGN KEY([ID])
+REFERENCES [dbo].[Usuarios] ([ID])
+GO
+ALTER TABLE [dbo].[Pacientes]  WITH NOCHECK ADD FOREIGN KEY([ID])
+REFERENCES [dbo].[Usuarios] ([ID])
+GO
+ALTER TABLE [dbo].[VacunaEnfermedad]  WITH NOCHECK ADD FOREIGN KEY([EnfermedadCodigo])
+REFERENCES [dbo].[Enfermedades] ([Codigo])
+GO
+ALTER TABLE [dbo].[VacunaEnfermedad]  WITH NOCHECK ADD FOREIGN KEY([VacunaCodigo])
+REFERENCES [dbo].[Vacunas] ([Codigo])
+GO
+USE [master]
+GO
+ALTER DATABASE [ClinicaDB] SET  READ_WRITE 
+GO

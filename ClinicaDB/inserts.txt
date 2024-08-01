@@ -1,0 +1,110 @@
+USE [ClinicaDB]
+GO
+
+-- Insertar registros en la tabla Usuarios (usados por Pacientes, Medicos y Empleados)
+INSERT INTO [dbo].[Usuarios] (Nombre, Apellido, FechaNacimiento, Telefono, Direccion, Codigo, Cedula)
+VALUES
+('John', 'Doe', '1980-01-01', '1234567890', '123 Main St', 'U001', '710-2001636-0'),
+('Jane', 'Doe', '1985-02-02', '2345678901', '234 Main St', 'U002', '262-2842002-3'),
+('Jim', 'Beam', '1970-03-03', '3456789012', '345 Main St', 'U003', '302-8407999-1'),
+('Jack', 'Daniels', '1965-04-04', '4567890123', '456 Main St', 'U004', '898-2696257-0'),
+('Josie', 'Wales', '1990-05-05', '5678901234', '567 Main St', 'U005', '402-4772111-7'),
+('Anna', 'Smith', '1982-06-06', '6789012345', '678 Main St', 'U006', '110-7213950-6'),
+('Bob', 'Johnson', '1987-07-07', '7890123456', '789 Main St', 'U007', '168-1927351-2'),
+('Chris', 'Lee', '1992-08-08', '8901234567', '890 Main St', 'U008', '266-9989976-8'),
+('Diana', 'King', '1975-09-09', '9012345678', '901 Main St', 'U009', '955-1902251-8'),
+('Evan', 'Baker', '1968-10-10', '0123456789', '012 Main St', 'U010', '259-7155405-0'),
+('Frank', 'Martin', '1972-11-11', '1234509876', '345 Side St', 'U011', '794-2328850-6'),
+('Gina', 'Clark', '1983-12-12', '2345609876', '456 Side St', 'U012', '745-9457944-5'),
+('Henry', 'Moore', '1991-01-13', '3456709876', '567 Side St', 'U013', '468-8400476-7'),
+('Ivy', 'Taylor', '1989-02-14', '4567809876', '678 Side St', 'U014', '159-1084447-9'),
+('Jack', 'Anderson', '1985-03-15', '5678909876', '789 Side St', 'U015', '830-2101152-6');
+
+-- Insertar registros en la tabla Medicos
+INSERT INTO [dbo].[Medicos] (ID, Login, Password, Consultorio, Especialidad)
+VALUES
+(1, 'jdoe', 'password1', '101', 'Cardiologia'),
+(2, 'jadoe', 'password2', '102', 'Neurologia'),
+(3, 'jbeam', 'password3', '103', 'Pediatria'),
+(4, 'jdaniels', 'password4', '104', 'Dermatologia'),
+(5, 'jwales', 'password5', '105', 'Ginecologia');
+
+-- Insertar registros en la tabla Pacientes
+INSERT INTO [dbo].[Pacientes] (ID, TipoSangre, RH, Ocupacion, TelefonoOpc)
+VALUES
+(6, 'A', '+', 'Ingeniero', '1234567'),
+(7, 'B', '-', 'Profesor', '2345678'),
+(8, 'O', '+', 'Mecanico', '3456789'),
+(9, 'AB', '-', 'Arquitecto', '4567890'),
+(10, 'A', '-', 'Doctor', '5678901');
+
+-- Insertar registros en la tabla Citas
+INSERT INTO [dbo].[Citas] (Codigo, Fecha, Notas, Especialidad, DoctorID, UsuarioID)
+VALUES
+('C001', '2024-07-01', 'Consulta General', 'Cardiologia', 1, 6),
+('C002', '2024-07-02', 'Chequeo Anual', 'Neurologia', 2, 7),
+('C003', '2024-07-03', 'Revisión', 'Pediatria', 3, 8),
+('C004', '2024-07-04', 'Consulta Dermatológica', 'Dermatologia', 4, 9),
+('C005', '2024-07-05', 'Control Prenatal', 'Ginecologia', 5, 10);
+
+-- Insertar registros en la tabla Consultas
+INSERT INTO [dbo].[Consultas] (CitaCodigo, Observaciones, Diagnostico, Receta, Historial, Estatura, Peso, TipoSangre, RH, Fecha)
+VALUES
+('C001', 'Observacion 1', 'Diagnostico 1', 'Receta 1', 1, 180, 75, 'A', '+', '2024-07-01'),
+('C002', 'Observacion 2', 'Diagnostico 2', 'Receta 2', 1, 175, 70, 'B', '-', '2024-07-02'),
+('C003', 'Observacion 3', 'Diagnostico 3', 'Receta 3', 1, 165, 65, 'O', '+', '2024-07-03'),
+('C004', 'Observacion 4', 'Diagnostico 4', 'Receta 4', 1, 160, 60, 'AB', '-', '2024-07-04'),
+('C005', 'Observacion 5', 'Diagnostico 5', 'Receta 5', 1, 155, 55, 'A', '-', '2024-07-05');
+
+-- Insertar registros en la tabla ConsultaEnfermedad
+INSERT INTO [dbo].[ConsultaEnfermedad] (ConsultaID, EnfermedadCodigo)
+VALUES
+(1, 'E001'),
+(2, 'E002'),
+(3, 'E003'),
+(4, 'E004'),
+(5, 'E005');
+
+-- Insertar registros en la tabla Dosis
+INSERT INTO [dbo].[Dosis] (VacunaCodigo, PacienteID, MedicoID, Fecha)
+VALUES
+('V001', 6, 1, '2024-07-01'),
+('V002', 7, 2, '2024-07-02'),
+('V003', 8, 3, '2024-07-03'),
+('V004', 9, 4, '2024-07-04'),
+('V005', 10, 5, '2024-07-05');
+
+-- Insertar registros en la tabla Enfermedades
+INSERT INTO [dbo].[Enfermedades] (Codigo, Nombre, Tipo, Informacion, Descubierta, Transmisibilidad)
+VALUES
+('E001', 'Enfermedad 1', 'Tipo 1', 'Informacion 1', '2000-01-01', 1),
+('E002', 'Enfermedad 2', 'Tipo 2', 'Informacion 2', '2001-02-02', 2),
+('E003', 'Enfermedad 3', 'Tipo 3', 'Informacion 3', '2002-03-03', 3),
+('E004', 'Enfermedad 4', 'Tipo 4', 'Informacion 4', '2003-04-04', 4),
+('E005', 'Enfermedad 5', 'Tipo 5', 'Informacion 5', '2004-05-05', 5);
+
+-- Insertar registros en la tabla Historiales
+INSERT INTO [dbo].[Historiales] (ConsultaID)
+VALUES
+(1),
+(2),
+(4);
+
+-- Insertar registros en la tabla Vacunas
+INSERT INTO [dbo].[Vacunas] (Codigo, Nombre, Laboratorio, Administracion)
+VALUES
+('V001', 'Vacuna 1', 'Lab 1', 'Oral'),
+('V002', 'Vacuna 2', 'Lab 2', 'Inyectable'),
+('V003', 'Vacuna 3', 'Lab 3', 'Inhalable'),
+('V004', 'Vacuna 4', 'Lab 4', 'Tópica'),
+('V005', 'Vacuna 5', 'Lab 5', 'Sublingual');
+
+-- Insertar registros en la tabla VacunaEnfermedad
+INSERT INTO [dbo].[VacunaEnfermedad] (VacunaCodigo, EnfermedadCodigo)
+VALUES
+('V001', 'E001'),
+('V002', 'E002'),
+('V003', 'E003'),
+('V004', 'E004'),
+('V005', 'E005');
+

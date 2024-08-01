@@ -1,0 +1,135 @@
+-- Creación de la base de datos
+CREATE DATABASE ClinicaDB;
+GO
+
+USE ClinicaDB;
+GO
+
+-- Tabla para usuarios genéricos
+CREATE TABLE Usuarios (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Apellido VARCHAR(100),
+    FechaNacimiento DATE,
+    Telefono VARCHAR(15),
+    Direccion VARCHAR(255),
+    Codigo VARCHAR(50),
+    Cedula VARCHAR(50) NULL
+);
+GO
+
+-- Tabla para pacientes que hereda de Usuarios
+CREATE TABLE Pacientes (
+    ID INT PRIMARY KEY,
+    TipoSangre VARCHAR(5),
+    RH VARCHAR(5),
+    Ocupacion VARCHAR(100),
+    TelefonoOpc VARCHAR(15),
+    FOREIGN KEY (ID) REFERENCES Usuarios(ID)
+);
+GO
+
+-- Tabla para médicos que hereda de Usuarios
+CREATE TABLE Medicos (
+    ID INT PRIMARY KEY,
+    Login VARCHAR(50),
+    Password VARCHAR(50),
+    Consultorio VARCHAR(50),
+    Especialidad VARCHAR(100),
+    FOREIGN KEY (ID) REFERENCES Usuarios(ID)
+);
+GO
+
+-- Tabla para enfermedades
+CREATE TABLE Enfermedades (
+    Codigo VARCHAR(50) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Tipo VARCHAR(100),
+    Informacion TEXT,
+    Descubierta DATE,
+    Transmisibilidad INT
+);
+GO
+
+-- Tabla para vacunas
+CREATE TABLE Vacunas (
+    Codigo VARCHAR(50) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Laboratorio VARCHAR(100),
+    Administracion VARCHAR(100)
+);
+GO
+
+-- Relación entre vacunas y enfermedades
+CREATE TABLE VacunaEnfermedad (
+    VacunaCodigo VARCHAR(50),
+    EnfermedadCodigo VARCHAR(50),
+    PRIMARY KEY (VacunaCodigo, EnfermedadCodigo),
+    FOREIGN KEY (VacunaCodigo) REFERENCES Vacunas(Codigo),
+    FOREIGN KEY (EnfermedadCodigo) REFERENCES Enfermedades(Codigo)
+);
+GO
+
+-- Tabla para dosis aplicadas
+CREATE TABLE Dosis (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    VacunaCodigo VARCHAR(50),
+    PacienteID INT,
+    MedicoID INT,
+    Fecha DATE,
+    FOREIGN KEY (VacunaCodigo) REFERENCES Vacunas(Codigo),
+    FOREIGN KEY (PacienteID) REFERENCES Pacientes(ID),
+    FOREIGN KEY (MedicoID) REFERENCES Medicos(ID)
+);
+GO
+
+-- Tabla para citas
+CREATE TABLE Citas (
+    Codigo VARCHAR(50) PRIMARY KEY,
+    Fecha DATE,
+    Notas TEXT,
+    Especialidad VARCHAR(100),
+    DoctorID INT,
+    UsuarioID INT,
+    Estado VARCHAR(20),
+    FOREIGN KEY (DoctorID) REFERENCES Medicos(ID),
+    FOREIGN KEY (UsuarioID) REFERENCES Usuarios(ID)
+);
+GO
+
+ALTER TABLE Citas ADD estado VARCHAR(20) DEFAULT 'pendiente';
+
+-- Tabla para consultas
+CREATE TABLE Consultas (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    CitaCodigo VARCHAR(50),
+    Observaciones TEXT,
+    Diagnostico TEXT,
+    Receta TEXT,
+    Historial BIT,
+    Estatura INT,
+    Peso INT,
+    TipoSangre VARCHAR(5),
+    RH VARCHAR(5),
+    Fecha DATE,
+    FOREIGN KEY (CitaCodigo) REFERENCES Citas(Codigo)
+);
+GO
+
+-- Relación entre consultas y enfermedades
+CREATE TABLE ConsultaEnfermedad (
+    ConsultaID INT,
+    EnfermedadCodigo VARCHAR(50),
+    PRIMARY KEY (ConsultaID, EnfermedadCodigo),
+    FOREIGN KEY (ConsultaID) REFERENCES Consultas(ID),
+    FOREIGN KEY (EnfermedadCodigo) REFERENCES Enfermedades(Codigo)
+);
+GO
+
+-- Tabla para historiales
+CREATE TABLE Historiales (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    ConsultaID INT,
+    FOREIGN KEY (ConsultaID) REFERENCES Consultas(ID)
+);
+GO
